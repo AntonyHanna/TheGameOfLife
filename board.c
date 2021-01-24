@@ -135,9 +135,14 @@ uint8_t count_live_neigbours(char board[BOARD_SIZE_X][BOARD_SIZE_Y], int8_t x, i
     return ret;
 }
 
-void set_cell_to_char(char board[BOARD_SIZE_X][BOARD_SIZE_Y], int8_t x, int8_t y, char fill)
+uint8_t set_cell_to_char(char board[BOARD_SIZE_X][BOARD_SIZE_Y], int8_t x, int8_t y, char fill)
 {
-    board[x][y] = fill;
+    if (validate_point(x, y))
+    {
+        board[x][y] = fill;
+        return 1;
+    }
+    return 0;
 }
 
 void begin_simulation(char board[BOARD_SIZE_X][BOARD_SIZE_Y])
