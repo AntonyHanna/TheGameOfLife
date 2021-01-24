@@ -47,7 +47,7 @@ void update_board_state(char board[BOARD_SIZE_X][BOARD_SIZE_Y])
                 }
                 else
                 {
-                    board[x][y] = '.';
+                    set_cell_to_char(board, x, y, '.');
                 }
             }
 
@@ -57,7 +57,7 @@ void update_board_state(char board[BOARD_SIZE_X][BOARD_SIZE_Y])
 
                 if (count == 3)
                 {
-                    board[x][y] = '+';
+                    set_cell_to_char(board, x, y, '+');
                 }
                 else
                 {
@@ -133,6 +133,11 @@ uint8_t count_live_neigbours(char board[BOARD_SIZE_X][BOARD_SIZE_Y], int8_t x, i
     }
 
     return ret;
+}
+
+void set_cell_to_char(char board[BOARD_SIZE_X][BOARD_SIZE_Y], int8_t x, int8_t y, char fill)
+{
+    board[x][y] = fill;
 }
 
 void begin_simulation(char board[BOARD_SIZE_X][BOARD_SIZE_Y])

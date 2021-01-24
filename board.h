@@ -14,3 +14,4 @@ uint8_t validate_point(int8_t x, int8_t y);
 char get_char_at_point(char board[BOARD_SIZE_X][BOARD_SIZE_Y], int8_t x, int8_t y);
 uint8_t count_live_neigbours(char board[BOARD_SIZE_X][BOARD_SIZE_Y], int8_t x, int8_t y);
 void begin_simulation(char board[BOARD_SIZE_X][BOARD_SIZE_Y]);
+void set_cell_to_char(char board[BOARD_SIZE_X][BOARD_SIZE_Y], int8_t x, int8_t y, char fill);
