@@ -2,9 +2,6 @@
 
 int main(int argc, char *argv[])
 {
-    char *board;
-    int board_x, board_y;
-
     if (argc != 3)
     {
         fprintf(stderr, "Invalid arguments supplied should be BOARD_SIZE_X BOARD_SIZE_Y\n"
@@ -12,13 +9,14 @@ int main(int argc, char *argv[])
         return -1;
     }
 
-    board_x = atoi(argv[1]);
-    board_y = atoi(argv[2]);
-    board = (char *)malloc(sizeof(char) * board_x * board_y);
+    board_info *info = malloc(sizeof(board_info));
 
-    memset(board, '.', sizeof(char) * board_x * board_y);
+    info->len_x = atoi(argv[1]);
+    info->len_y = atoi(argv[2]);
+    info->board = (char *)malloc(sizeof(char) * info->len_x * info->len_y);
 
-    begin_simulation(board, board_x, board_y);
+    memset(info->board, '.', sizeof(char) * info->len_x * info->len_y);
+    begin_simulation(*info);
 
     return 0;
 }
