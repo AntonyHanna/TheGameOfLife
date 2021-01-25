@@ -1,49 +1,51 @@
 #include "board.h"
 
 // might segfault with dynamicly sized arrays
-void print_board(char board[BOARD_SIZE_X][BOARD_SIZE_Y])
+void print_board(char *board, size_t len_x, size_t len_y)
 {
-    for (uint8_t y = 0; y < BOARD_SIZE_Y; y++)
+    for (uint8_t y = 0; y < len_y; y++)
     {
-        for (uint8_t x = 0; x < BOARD_SIZE_X; x++)
+        for (uint8_t x = 0; x < len_x; x++)
         {
-            printf("%c ", board[x][y]);
+            printf("%c ", get_char_at_point(board, len_x, len_y, x, y));
         }
 
         printf("\n");
     }
 }
 
-void populate_live_cells(char board[BOARD_SIZE_X][BOARD_SIZE_Y])
+void populate_live_cells(char *board, size_t len_x, size_t len_y)
 {
     srand(time(NULL));
 
-    for (uint8_t y = 0; y < BOARD_SIZE_Y; y++)
+    for (uint8_t y = 0; y < len_y; y++)
     {
-        for (uint8_t x = 0; x < BOARD_SIZE_X; x++)
+        for (uint8_t x = 0; x < len_x; x++)
         {
             // 50 percent chance of spawning
             if (rand() % 2 == 0)
             {
-                board[x][y] = '+';
+                set_cell_to_char(board, len_x, len_y, x, y, '+');
             }
         }
     }
 }
 
-void update_board_state(char board[BOARD_SIZE_X][BOARD_SIZE_Y])
+void update_board_state(char *board, size_t len_x, size_t len_y)
 {
-    char boardCopy[BOARD_SIZE_X][BOARD_SIZE_Y];
+    char *boardCopy;
 
-    memcpy(boardCopy, board, sizeof(char) * BOARD_SIZE_X * BOARD_SIZE_Y);
+    boardCopy = malloc(sizeof(char) * len_x * len_y);
 
-    for (uint8_t y = 0; y < BOARD_SIZE_Y; y++)
+    memcpy(boardCopy, board, sizeof(char) * len_x * len_y);
+
+    for (uint8_t y = 0; y < len_y; y++)
     {
-        for (uint8_t x = 0; x < BOARD_SIZE_X; x++)
+        for (uint8_t x = 0; x < len_x; x++)
         {
-            if (get_char_at_point(board, x, y) == '+')
+            if (get_char_at_point(board, len_x, len_y, x, y) == '+')
             {
-                uint8_t count = count_live_neigbours(board, x, y);
+                uint8_t count = count_live_neigbours(board, len_x, len_y, x, y);
 
                 if (count == 2 || count == 3)
                 {
@@ -51,17 +53,17 @@ void update_board_state(char board[BOARD_SIZE_X][BOARD_SIZE_Y])
                 }
                 else
                 {
-                    set_cell_to_char(boardCopy, x, y, '.');
+                    set_cell_to_char(boardCopy, len_x, len_y, x, y, '.');
                 }
             }
 
-            if (get_char_at_point(board, x, y) == '.')
+            if (get_char_at_point(board, len_x, len_y, x, y) == '.')
             {
-                uint8_t count = count_live_neigbours(board, x, y);
+                uint8_t count = count_live_neigbours(board, len_x, len_y, x, y);
 
                 if (count == 3)
                 {
-                    set_cell_to_char(boardCopy, x, y, '+');
+                    set_cell_to_char(boardCopy, len_x, len_y, x, y, '+');
                 }
                 else
                 {
@@ -71,13 +73,14 @@ void update_board_state(char board[BOARD_SIZE_X][BOARD_SIZE_Y])
         }
     }
 
-    memcpy(board, boardCopy, sizeof(char) * BOARD_SIZE_X * BOARD_SIZE_Y);
+    memcpy(board, boardCopy, sizeof(char) * len_x * len_y);
+    free(boardCopy);
 }
 
-uint8_t validate_point(int8_t x, int8_t y)
+uint8_t validate_point(size_t len_x, size_t len_y, int8_t x, int8_t y)
 {
-    if (x < 0 || x > BOARD_SIZE_X ||
-        y < 0 || y > BOARD_SIZE_Y)
+    if (x < 0 || x > len_x ||
+        y < 0 || y > len_y)
     {
         return 0;
     }
@@ -85,55 +88,55 @@ uint8_t validate_point(int8_t x, int8_t y)
     return 1;
 }
 
-char get_char_at_point(char board[BOARD_SIZE_X][BOARD_SIZE_Y], int8_t x, int8_t y)
+char get_char_at_point(char *board, size_t len_x, size_t len_y, int8_t x, int8_t y)
 {
-    if (validate_point(x, y))
+    if (validate_point(len_x, len_y, x, y))
     {
-        return board[x][y];
+        return board[get_index(len_y, x, y)];
     }
 
     return -1;
 }
 
-uint8_t count_live_neigbours(char board[BOARD_SIZE_X][BOARD_SIZE_Y], int8_t x, int8_t y)
+uint8_t count_live_neigbours(char *board, size_t len_x, size_t len_y, int8_t x, int8_t y)
 {
     uint8_t ret = 0;
     // left and right
-    if (get_char_at_point(board, x + 1, y) == '+')
+    if (get_char_at_point(board, len_x, len_y, x + 1, y) == '+')
     {
         ret++;
     }
-    if (get_char_at_point(board, x - 1, y) == '+')
+    if (get_char_at_point(board, len_x, len_y, x - 1, y) == '+')
     {
         ret++;
     }
 
     // top and bottom
-    if (get_char_at_point(board, x, y + 1) == '+')
+    if (get_char_at_point(board, len_x, len_y, x, y + 1) == '+')
     {
         ret++;
     }
-    if (get_char_at_point(board, x, y - 1) == '+')
+    if (get_char_at_point(board, len_x, len_y, x, y - 1) == '+')
     {
         ret++;
     }
 
     // top right and bottom left corners
-    if (get_char_at_point(board, x + 1, y + 1) == '+')
+    if (get_char_at_point(board, len_x, len_y, x + 1, y + 1) == '+')
     {
         ret++;
     }
-    if (get_char_at_point(board, x - 1, y - 1) == '+')
+    if (get_char_at_point(board, len_x, len_y, x - 1, y - 1) == '+')
     {
         ret++;
     }
 
     // top left and bottom right corners
-    if (get_char_at_point(board, x - 1, y + 1) == '+')
+    if (get_char_at_point(board, len_x, len_y, x - 1, y + 1) == '+')
     {
         ret++;
     }
-    if (get_char_at_point(board, x + 1, y - 1) == '+')
+    if (get_char_at_point(board, len_x, len_y, x + 1, y - 1) == '+')
     {
         ret++;
     }
@@ -141,25 +144,31 @@ uint8_t count_live_neigbours(char board[BOARD_SIZE_X][BOARD_SIZE_Y], int8_t x, i
     return ret;
 }
 
-uint8_t set_cell_to_char(char board[BOARD_SIZE_X][BOARD_SIZE_Y], int8_t x, int8_t y, char fill)
+uint8_t set_cell_to_char(char *board, size_t len_x, size_t len_y, int8_t x, int8_t y, char fill)
 {
-    if (validate_point(x, y))
+    if (validate_point(len_x, len_y, x, y))
     {
-        board[x][y] = fill;
+        board[get_index(len_y, x, y)] = fill;
         return 1;
     }
     return 0;
 }
 
-void begin_simulation(char board[BOARD_SIZE_X][BOARD_SIZE_Y])
+void begin_simulation(char *board, size_t len_x, size_t len_y)
 {
-    populate_live_cells(board);
+    populate_live_cells(board, len_x, len_y);
+    print_board(board, len_x, len_y);
 
     while (1)
     {
-        update_board_state(board);
-        print_board(board);
+        update_board_state(board, len_x, len_y);
+        print_board(board, len_x, len_y);
         printf("\n");
         sleep(1);
     }
+}
+
+uint16_t get_index(size_t len_y, int8_t x, int8_t y)
+{
+    return (len_y * x) + y;
 }
