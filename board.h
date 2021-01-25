@@ -5,14 +5,15 @@
 #include <unistd.h>
 #include <string.h>
 
-#define BOARD_SIZE_X 30
-#define BOARD_SIZE_Y 15
+void print_board(char *board, size_t len_x, size_t len_y);
+void populate_live_cells(char *board, size_t len_x, size_t len_y);
+void update_board_state(char *board, size_t len_x, size_t len_y);
 
-void print_board(char board[BOARD_SIZE_X][BOARD_SIZE_Y]);
-void populate_live_cells(char board[BOARD_SIZE_X][BOARD_SIZE_Y]);
-void update_board_state(char board[BOARD_SIZE_X][BOARD_SIZE_Y]);
-uint8_t validate_point(int8_t x, int8_t y);
-char get_char_at_point(char board[BOARD_SIZE_X][BOARD_SIZE_Y], int8_t x, int8_t y);
-uint8_t count_live_neigbours(char board[BOARD_SIZE_X][BOARD_SIZE_Y], int8_t x, int8_t y);
-void begin_simulation(char board[BOARD_SIZE_X][BOARD_SIZE_Y]);
-uint8_t set_cell_to_char(char board[BOARD_SIZE_X][BOARD_SIZE_Y], int8_t x, int8_t y, char fill);
+uint8_t validate_point(size_t len_x, size_t len_y, int8_t x, int8_t y);
+char get_char_at_point(char *board, size_t len_x, size_t len_y, int8_t x, int8_t y);
+uint8_t count_live_neigbours(char *board, size_t len_x, size_t len_y, int8_t x, int8_t y);
+void begin_simulation(char *board, size_t len_x, size_t len_y);
+uint8_t set_cell_to_char(char *board, size_t len_x, size_t len_y, int8_t x, int8_t y, char fill);
+
+// turns an 2 dimensional index into 1 dimensional index
+uint16_t get_index(size_t len_y, int8_t x, int8_t y);

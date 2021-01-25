@@ -2,16 +2,23 @@
 
 int main(int argc, char *argv[])
 {
-    char board[BOARD_SIZE_X][BOARD_SIZE_Y];
-    memset(board, '.', sizeof(char) * BOARD_SIZE_X * BOARD_SIZE_Y);
+    char *board;
+    int board_x, board_y;
 
-    print_board(board);
-    printf("\n\n");
-    populate_live_cells(board);
-    printf("\n\n");
-    print_board(board);
+    if (argc != 3)
+    {
+        fprintf(stderr, "Invalid arguments supplied should be BOARD_SIZE_X BOARD_SIZE_Y\n"
+                        "(e.g. 30 15)");
+        return -1;
+    }
 
-    begin_simulation(board);
+    board_x = atoi(argv[1]);
+    board_y = atoi(argv[2]);
+    board = (char *)malloc(sizeof(char) * board_x * board_y);
+
+    memset(board, '.', sizeof(char) * board_x * board_y);
+
+    begin_simulation(board, board_x, board_y);
 
     return 0;
 }
