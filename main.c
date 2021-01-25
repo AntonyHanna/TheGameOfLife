@@ -3,13 +3,7 @@
 int main(int argc, char *argv[])
 {
     char board[BOARD_SIZE_X][BOARD_SIZE_Y];
-    for (int i = 0; i < BOARD_SIZE_X; i++)
-    {
-        for (int y = 0; y < BOARD_SIZE_Y; y++)
-        {
-            board[i][y] = '.';
-        }
-    }
+    memset(board, '.', sizeof(char) * BOARD_SIZE_X * BOARD_SIZE_Y);
 
     print_board(board);
     printf("\n\n");
