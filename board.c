@@ -43,31 +43,22 @@ void update_board_state(char *board, size_t len_x, size_t len_y)
     {
         for (uint8_t x = 0; x < len_x; x++)
         {
+            uint8_t count = count_live_neigbours(board, len_x, len_y, x, y);
+
             if (get_char_at_point(board, len_x, len_y, x, y) == '+')
             {
-                uint8_t count = count_live_neigbours(board, len_x, len_y, x, y);
-
-                if (count == 2 || count == 3)
-                {
-                    continue;
-                }
-                else
+                // same as if count == 2 || count == 3
+                if (count <= 1 || count >= 4)
                 {
                     set_cell_to_char(boardCopy, len_x, len_y, x, y, '.');
                 }
             }
 
-            if (get_char_at_point(board, len_x, len_y, x, y) == '.')
+            else if (get_char_at_point(board, len_x, len_y, x, y) == '.')
             {
-                uint8_t count = count_live_neigbours(board, len_x, len_y, x, y);
-
                 if (count == 3)
                 {
                     set_cell_to_char(boardCopy, len_x, len_y, x, y, '+');
-                }
-                else
-                {
-                    continue;
                 }
             }
         }
