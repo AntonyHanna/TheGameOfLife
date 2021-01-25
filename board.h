@@ -3,6 +3,7 @@
 #include <time.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <string.h>
 
 #define BOARD_SIZE_X 30
 #define BOARD_SIZE_Y 15
