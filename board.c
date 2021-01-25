@@ -33,6 +33,10 @@ void populate_live_cells(char board[BOARD_SIZE_X][BOARD_SIZE_Y])
 
 void update_board_state(char board[BOARD_SIZE_X][BOARD_SIZE_Y])
 {
+    char boardCopy[BOARD_SIZE_X][BOARD_SIZE_Y];
+
+    memcpy(boardCopy, board, sizeof(char) * BOARD_SIZE_X * BOARD_SIZE_Y);
+
     for (uint8_t y = 0; y < BOARD_SIZE_Y; y++)
     {
         for (uint8_t x = 0; x < BOARD_SIZE_X; x++)
@@ -47,7 +51,7 @@ void update_board_state(char board[BOARD_SIZE_X][BOARD_SIZE_Y])
                 }
                 else
                 {
-                    set_cell_to_char(board, x, y, '.');
+                    set_cell_to_char(boardCopy, x, y, '.');
                 }
             }
 
@@ -57,7 +61,7 @@ void update_board_state(char board[BOARD_SIZE_X][BOARD_SIZE_Y])
 
                 if (count == 3)
                 {
-                    set_cell_to_char(board, x, y, '+');
+                    set_cell_to_char(boardCopy, x, y, '+');
                 }
                 else
                 {
@@ -66,6 +70,8 @@ void update_board_state(char board[BOARD_SIZE_X][BOARD_SIZE_Y])
             }
         }
     }
+
+    memcpy(board, boardCopy, sizeof(char) * BOARD_SIZE_X * BOARD_SIZE_Y);
 }
 
 uint8_t validate_point(int8_t x, int8_t y)
@@ -135,9 +141,14 @@ uint8_t count_live_neigbours(char board[BOARD_SIZE_X][BOARD_SIZE_Y], int8_t x, i
     return ret;
 }
 
-void set_cell_to_char(char board[BOARD_SIZE_X][BOARD_SIZE_Y], int8_t x, int8_t y, char fill)
+uint8_t set_cell_to_char(char board[BOARD_SIZE_X][BOARD_SIZE_Y], int8_t x, int8_t y, char fill)
 {
-    board[x][y] = fill;
+    if (validate_point(x, y))
+    {
+        board[x][y] = fill;
+        return 1;
+    }
+    return 0;
 }
 
 void begin_simulation(char board[BOARD_SIZE_X][BOARD_SIZE_Y])
