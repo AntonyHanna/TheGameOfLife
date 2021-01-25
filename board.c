@@ -149,6 +149,7 @@ void begin_simulation(char *board, size_t len_x, size_t len_y)
 {
     populate_live_cells(board, len_x, len_y);
     print_board(board, len_x, len_y);
+    printf("\n")
 
     while (1)
     {
