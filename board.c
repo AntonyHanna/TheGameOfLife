@@ -51,8 +51,7 @@ void update_board_state(board_info info)
 
             if (get_char_at_point(info, x, y) == '+')
             {
-                // same as if count == 2 || count == 3
-                if (count <= 1 || count >= 4)
+                if (count != 2 && count != 3)
                 {
                     set_cell_to_char(*tmp_info, x, y, '.');
                 }
