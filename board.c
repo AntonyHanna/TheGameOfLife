@@ -34,7 +34,7 @@ void populate_live_cells(board_info info)
 void update_board_state(board_info info)
 {
     board_info *tmp_info;
-    
+
     // fill in the tmp board_info
     tmp_info = malloc(sizeof(board_info));
     tmp_info->len_x = info.len_x;
@@ -156,7 +156,7 @@ void begin_simulation(board_info info)
     print_board(info);
     printf("\n");
 
-        while (1)
+    while (1)
     {
         update_board_state(info);
         print_board(info);
