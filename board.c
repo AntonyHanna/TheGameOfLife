@@ -75,8 +75,8 @@ void update_board_state(board_info info)
 
 uint8_t validate_point(board_info info, int8_t x, int8_t y)
 {
-    if (x < 0 || x > info.len_x ||
-        y < 0 || y > info.len_y)
+    if (x < 0 || x >= info.len_x ||
+        y < 0 || y >= info.len_y)
     {
         return 0;
     }
