@@ -18,5 +18,8 @@ int main(int argc, char *argv[])
     memset(info->board, '.', sizeof(char) * info->len_x * info->len_y);
     begin_simulation(*info);
 
+    free(info->board);
+    free(info);
+    
     return 0;
 }
