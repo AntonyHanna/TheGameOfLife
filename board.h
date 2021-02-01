@@ -31,6 +31,7 @@ Help in grabbing data from the board
 */
 char get_char_at_point(board_info info, int8_t x, int8_t y);
 uint16_t get_index(size_t len_y, int8_t x, int8_t y); /* takes a 2d index and returns a 1d index */
+uint16_t get_live_cell_count(board_info info);
 
 /*
 HELPERS

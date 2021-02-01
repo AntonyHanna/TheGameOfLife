@@ -156,7 +156,7 @@ void begin_simulation(board_info info)
     print_board(info);
     printf("\n");
 
-    while (1)
+    while (get_live_cell_count(info))
     {
         update_board_state(info);
         print_board(info);
@@ -168,4 +168,22 @@ void begin_simulation(board_info info)
 uint16_t get_index(size_t len_y, int8_t x, int8_t y)
 {
     return (len_y * x) + y;
+}
+
+uint16_t get_live_cell_count(board_info info)
+{
+    uint16_t live_cell_count = 0;
+
+    for (uint8_t y = 0; y < info.len_y; y++)
+    {
+        for (uint8_t x = 0; x < info.len_x; x++)
+        {
+            if (get_char_at_point(info, x, y) == '+')
+            {
+                live_cell_count++;
+            }
+        }
+    }
+
+    return live_cell_count;
 }
